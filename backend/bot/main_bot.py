@@ -331,6 +331,8 @@ def new_session():
 def chat_with_agent(request : Request,payload: ChatInput):
     """Chat endpoint maintaining conversation memory per session."""
 
+    print(f"User IP identified: {request.client.host}", flush=True)
+
     db= session()
 
     response = stateful_chain.invoke(
@@ -442,6 +444,7 @@ def download_json(session_dict : ChatHistory):
 @router.get("/test")
 @limiter.limit("5/minute")
 async def test_route(request: Request):
+    print(f"User IP identified: {request.client.host}", flush=True)
     return {"ip": request.client.host, "message": "You are being tracked by your real IP!"}
 
 
