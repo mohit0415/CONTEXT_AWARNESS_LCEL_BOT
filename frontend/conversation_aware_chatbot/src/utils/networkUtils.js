@@ -2,6 +2,7 @@ const postWithoutHeaders = async(url,requestBody) => {
     try {
         const response = await fetch(url,{
             method : 'POST',
+            credentials : 'include',
             body : JSON.stringify(requestBody),
             headers:{
                 'Content-Type':'application/json'
@@ -23,6 +24,7 @@ const getWithoutHeaders = async(url) => {
     try {
         const response = await fetch(url,{
             method : 'GET',
+            credentials : 'include',
             headers:{
                 'Content-Type':'application/json'
             }

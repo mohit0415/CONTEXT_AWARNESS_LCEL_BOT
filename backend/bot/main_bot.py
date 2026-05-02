@@ -22,7 +22,7 @@ from langchain_groq import ChatGroq
 from slowapi.util import get_remote_address
 from slowapi import Limiter,_rate_limit_exceeded_handler
 from config.env_config import settings
-from config.limiter_config import limiter,get_real_ip
+from config.limiter_config import limiter
 
 router = APIRouter()
 
@@ -332,12 +332,10 @@ def chat_with_agent(request : Request,payload: ChatInput):
     """Chat endpoint maintaining conversation memory per session."""
 
     print(f"User IP identified: {request.client.host}", flush=True)
-    obj = {
-        "x_forwarded_for": request.headers.get("X-Forwarded-For"),
-        "remote_addr_from_slowapi": get_real_ip(request),
-        "direct_client_host": request.client.host 
-    }
-    print(f'The IP DESCRIPTION IS: HEADERS:{obj.get('x_forwarded_for')}, IP:{obj.get('remote_addr_from_slowapi')}, direct_client:{obj.get('direct_client_host')}',flush=True)
+    user_id = request.state.user_id
+    print(f"[CHAT] Request from user_id: {user_id}", flush=True)
+    print(f"[CHAT] Client IP: {request.client.host}", flush=True)
+    # print(f'The IP DESCRIPTION IS: HEADERS:{obj.get('x_forwarded_for')}, IP:{obj.get('remote_addr_from_slowapi')}, direct_client:{obj.get('direct_client_host')}',flush=True)
 
     db= session()
 
@@ -444,17 +442,15 @@ def download_json(session_dict : ChatHistory):
         media_type="application/json"
     )
 
-
-
-
-@router.get("/test-ip")
-async def test_ip(request: Request):
+@router.get("/rate-limit-status")
+@limiter.limit("60/minute")
+async def rate_limit_status(request: Request):
+    """Check current rate limit status for debugging"""
     return {
-        "x_forwarded_for": request.headers.get("X-Forwarded-For"),
-        "remote_addr_from_slowapi": get_real_ip(request),
-        "direct_client_host": request.client.host 
+        "user_id": request.state.user_id,
+        "ip": request.client.host,
+        "key_used": get_user_key(request)
     }
-
 
 
 

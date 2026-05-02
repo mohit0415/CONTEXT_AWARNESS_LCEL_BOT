@@ -13,6 +13,8 @@ from db.db_config import db_engine
 from db import db_models
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 from config.limiter_config import limiter
+from utils.middleware_session import session_middleware
+from slowapi.middleware import SlowAPIMiddleware
 
 app = FastAPI()
 
@@ -36,7 +38,9 @@ app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 
-app.add_middleware(ProxyHeadersMiddleware, trusted_hosts="*")
+app.middleware("http")(session_middleware)
+
+app.add_middleware(SlowAPIMiddleware)
 
 
 
