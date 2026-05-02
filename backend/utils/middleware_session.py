@@ -17,7 +17,7 @@ async def session_middleware(request: Request, call_next):
         value=user_id,
         httponly=True,
         secure=True,  # Set to True if using HTTPS
-        samesite="lax",  # Important for cross-origin requests
+        samesite="none",  # Important for cross-origin requests
         path="/",  # Available for all routes
         max_age=30*24*60*60  # 30 days
     )
