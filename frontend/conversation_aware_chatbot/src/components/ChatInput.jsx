@@ -184,7 +184,7 @@ useEffect(() => {
       {/* Ask Button */}
       <div className="absolute right-3 bottom-4 flex flex-row sm:gap-5 gap-2 items-end">
         <div>
-            <p className="text-[10px] text-[#64748B] opacity-45"><span className="text-[12px]">{isHits ?? isHitNum}</span>{StringData.msgRemain}</p>
+            <p className="text-[10px] text-[#64748B] opacity-45"><span className="text-[12px]">{isHits ?? dispatch({type:"ISHIT",payload:isHitNum})}</span>{StringData.msgRemain}</p>
         </div>
         <button
         onClick={sendMessage}

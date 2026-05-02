@@ -4,7 +4,7 @@ const initialState = {
   isDashBoardToggle: false,
   isSessionTrigger: false,
   isSplitSscreen: true,
-  isHits : isHitNum
+  isHits : 4
 };
 
 export const booleanReducer = (state = initialState, action) => {
