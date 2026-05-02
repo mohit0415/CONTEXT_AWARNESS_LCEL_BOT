@@ -26,15 +26,15 @@ const DashBoard = () => {
   }
 
   return (
-    <div className='flex flex-col gap-0 h-screen w-full'>
+    <div className='flex flex-col gap-0 h-[100dvh] w-full overflow-hidden'>
       <div className='w-full'>
         <NavBar handleCurrentSession={handleSession}/>        
       </div>
-      <div className='flex flex-1 w-full overflow-hidden'>
-      <div className={`md:w-1/2 md:inline h-full min-w-0 ${screenSplit?'w-full':'hidden'}`}>
+      <div className=' min-h-0 flex flex-1 w-full overflow-hidden'>
+      <div className={`md:w-1/2 md:inline  min-w-0 min-h-0 h-full  ${screenSplit?'w-full':'hidden'}`}>
         <ChatBot currentSessionId={current_session_id} checkBool={checking}/>
       </div>
-      <div className={`md:w-1/2 md:inline h-full min-w-0 ${screenSplit?'hidden':'w-full'}`}>
+      <div className={`md:w-1/2 md:inline min-w-0 min-h-0 h-full  ${screenSplit?'hidden':'w-full'}`}>
         <ChatHistory currentSessionId={current_session_id} status={status}/>
       </div>
       </div>
