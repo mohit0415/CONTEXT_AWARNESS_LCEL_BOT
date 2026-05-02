@@ -52,7 +52,7 @@ const [cooldown, setCooldown] = useState(() => {
 
 // Update the timer every second
 useEffect(() => {
-    // localStorage.removeItem(COOLDOWN_KEY); 
+    localStorage.removeItem(COOLDOWN_KEY); 
     // add above statement if u want to stop the timer abruptly
     if (cooldown <= 0) {
         localStorage.removeItem(COOLDOWN_KEY); // Clean up
