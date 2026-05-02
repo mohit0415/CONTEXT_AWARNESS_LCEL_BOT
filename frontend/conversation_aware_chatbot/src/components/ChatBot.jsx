@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Responsing from "./Responsing";
 import ChatInput from "./ChatInput";
 import { useDispatch } from "react-redux";
 
 const ChatBot = ({currentSessionId,checkBool}) => {
   const dispatch = useDispatch()
+  const bottomRef = useRef(null);
   const [check,setCheck] = useState(false)
   const [sessionMessages, setSessionMessages] = useState({});
   const[messages,setMessages]=useState([
@@ -33,6 +34,11 @@ useEffect(() => {
 
 const messagesSession = sessionMessages[currentSessionId] || [];
 
+
+useEffect(() => {
+  bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+}, [messagesSession]);
+
   const onSend = (value) =>{
   //   setMessages(prev=>[...prev,{
   //     'role':'user',
@@ -56,8 +62,8 @@ const messagesSession = sessionMessages[currentSessionId] || [];
   }
   return (
     <div className="w-full h-full">
-      <div className="bg-[#0B1326] h-screen border-r border-[#334155] w-full flex flex-col">
-        <div className="overflow-y-auto flex-1 p-4 pb-30">
+      <div className="bg-[#0B1326] h-full border-r border-[#334155] w-full flex flex-col">
+        <div className="overflow-y-auto flex-1 p-4 pb-1 pt-5">
           {messagesSession.map((item, index) => (
             <div
               className={`flex my-6 ${item.role == "user" ? "justify-end pr-3" : "justify-start pl-3"}`}
@@ -66,6 +72,7 @@ const messagesSession = sessionMessages[currentSessionId] || [];
               <Responsing role={item?.role} content={item?.content} />
             </div>
           ))}
+          <div ref={bottomRef} />
         </div>
         <div className="sticky bottom-0 w-full bg-[#131B2E] py-4">
           <ChatInput onSend={onSend} currentSessionId={currentSessionId}/>
@@ -73,6 +80,6 @@ const messagesSession = sessionMessages[currentSessionId] || [];
       </div>
     </div>
   );
-};
+};  
 
 export default ChatBot;

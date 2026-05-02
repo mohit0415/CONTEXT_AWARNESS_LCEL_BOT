@@ -108,6 +108,12 @@ const NavBar = ({handleCurrentSession}) => {
     fetchSession() 
 
   },[genData,sessionTrigger])
+
+  useEffect(()=>{
+    if(sessions.length === 1){
+    dispatch({type:'UPDATE',payload:'103f1059-690a-4d38-85c8-aace59262293'})
+    }
+  },[sessions])
   
   const gen_id = async() => {
     // dispatch({type:"LOADIN"})
