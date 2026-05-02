@@ -11,6 +11,8 @@ from slowapi.errors import RateLimitExceeded
 from config.env_config import settings
 from db.db_config import db_engine
 from db import db_models
+from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
+from config.limiter_config import limiter
 
 app = FastAPI()
 
@@ -29,11 +31,12 @@ app.add_middleware(
 db_models.Base.metadata.create_all(bind=db_engine)
 
 
-limiter = Limiter(key_func=get_remote_address)
-
 
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+
+app.add_middleware(ProxyHeadersMiddleware, trusted_hosts="*")
 
 
 

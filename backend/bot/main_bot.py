@@ -22,11 +22,11 @@ from langchain_groq import ChatGroq
 from slowapi.util import get_remote_address
 from slowapi import Limiter,_rate_limit_exceeded_handler
 from config.env_config import settings
-
+from config.limiter_config import limiter
 
 router = APIRouter()
 
-limiter = Limiter(key_func=get_remote_address)
+
 
 
 
@@ -439,7 +439,10 @@ def download_json(session_dict : ChatHistory):
 
 
 
-
+@router.get("/test")
+@limiter.limit("5/minute")
+async def test_route(request: Request):
+    return {"ip": request.client.host, "message": "You are being tracked by your real IP!"}
 
 
 
