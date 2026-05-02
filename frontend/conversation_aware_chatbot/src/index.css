@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+
+.loader-overlay {
+  position: fixed;         
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;            
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0, 0, 0, 0.7); 
+  z-index: 9999;           
+}
+
+.loader-specific {
+  position: absolute;         
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  display: flex;            
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0, 0, 0, 0.7); 
+  z-index: 9999;           
+}
+
+textarea::placeholder {
+  font-weight: bold;
+  letter-spacing: 1px;
+  font-size: 12px;
+}
