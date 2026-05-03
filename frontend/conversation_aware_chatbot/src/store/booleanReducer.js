@@ -4,7 +4,9 @@ const initialState = {
   isDashBoardToggle: false,
   isSessionTrigger: false,
   isSplitSscreen: true,
-  isHits : 4
+  isHits : 4,
+  isPopupModal : true,
+  isChatHistoryLoad : false
 };
 
 export const booleanReducer = (state = initialState, action) => {
@@ -44,6 +46,16 @@ export const booleanReducer = (state = initialState, action) => {
         ...state,
         isHits: action.payload,
       };
+    case "ISDEBUG":
+        return {
+        ...state,
+        isPopupModal: !state.isPopupModal,
+      };
+      case "ISHISTORYLOAD":
+        return {
+          ...state,
+          isChatHistoryLoad : action.payload
+        }
 
 
     default:

@@ -5,12 +5,14 @@ import plusIcon from '../assets/Icon.png'
 import { genId } from "../utils/URLConstants";
 import JsonLogo from "../assets/chat_history.svg?react";
 import BotLogo from '../assets/botIcon.svg?react'
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getWithoutHeaders } from "../utils/networkUtils";
 import LoaderSpecific from "./LoaderSpecfic";
 
 const SideBarItems = () => {
     const [isSessionLoads,setSessionLoads] = useState(false)
+    const isChatHistoryLoad = useSelector((state)=>state.isBoolean.isChatHistoryLoad)
+
 
 const dispatch = useDispatch()
 
@@ -63,8 +65,9 @@ const dispatch = useDispatch()
       </div>
       <div className="flex flex-col gap-8">
         <button
-          className="hover:opacity-60 cursor-pointer"
+          className="hover:opacity-60 cursor-pointer disabled:opacity-40 disabled:border-red-500/70 p-1 disabled:border disabled:rounded-lg disbaled:cursor-not-allowed  disabled:cursor-not-allowed"
           onClick={gen_id}
+          disabled={isChatHistoryLoad}
         >
           <div className=" relative  py-5 px-6 bg-[#4F46E5] rounded-lg">
             {isSessionLoads?<LoaderSpecific size={5} classNameProp={'rounded-lg'}/>:

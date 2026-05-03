@@ -7,7 +7,7 @@ import { StringData } from "../data/StringData";
 import PrettyJson from "./PrettyJson";
 import { postWithoutHeaders } from "../utils/networkUtils";
 import { download, historyChat } from "../utils/URLConstants";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import LoaderSpecific from "./LoaderSpecfic";
 const ChatHistory = ({currentSessionId,status}) => {
   const [history,setHistory] = useState([])
@@ -15,15 +15,21 @@ const ChatHistory = ({currentSessionId,status}) => {
   const isStatus = useSelector(state=>state.isBoolean.isCheck)
   const [refreshLoad,setRefreshLoad] = useState(false)
   const [refreshToggle,setRefreshToggle] = useState(false)
+  const isDash = useSelector((state)=>state.isBoolean.isDashBoardToggle)
+  const isChatHistoryLoad = useSelector((state)=>state.isBoolean.isChatHistoryLoad)
+  const dispatch = useDispatch()
+  
 
   useEffect(()=>{
   console.log("LOCK FOR CALL CHAT HISTORY",isStatus)
-
+  console.log("CHAT HISTORY LOADIND STATUS UPON MOUNTING IS...",isChatHistoryLoad) 
   },[])
 
 
   useEffect(()=>{
     const db_call = async() => {
+      dispatch({type:'ISHISTORYLOAD',payload:true})
+      console.log("CHAT HISTORY LOADIND STATUS WHEN DN CALL STARTED IS...",isChatHistoryLoad)
       setHistoryLoad(true)
       setRefreshLoad(true)
       const reqBody = {
@@ -33,6 +39,8 @@ const ChatHistory = ({currentSessionId,status}) => {
       try {
         const res = await postWithoutHeaders(historyChat,reqBody)
         if(res.ok){
+          dispatch({type:'ISHISTORYLOAD',payload:false})
+          console.log("CHAT HISTORY LOADIND SUCCESS STATUS IS...",isChatHistoryLoad)
           setHistoryLoad(false)
           setHistory(res.data.chat_history)
           setRefreshLoad(false)
@@ -41,6 +49,8 @@ const ChatHistory = ({currentSessionId,status}) => {
         }
         else{
           console.log("Error occured in Post Call History")
+          dispatch({type:'ISHISTORYLOAD',payload:false})
+          console.log("CHAT HISTORY LOADIND STATUS  ERROR IS...",isChatHistoryLoad)
           setHistoryLoad(false)         
           setHistory([
             {
@@ -53,6 +63,8 @@ const ChatHistory = ({currentSessionId,status}) => {
         }
         
       } catch (error) {
+        dispatch({type:'ISHISTORYLOAD',payload:false})
+          console.log("CHAT HISTORY LOADIND API CALL PROBELM STATUS IS...",isChatHistoryLoad)
           setHistoryLoad(false)
           setRefreshLoad(false)
         console.log("Error Occured in ChatHistory:",error)
@@ -119,7 +131,12 @@ const handleRefresh = () => {
           <PrettyJson data={history}/>
         </div>
       </div>
-      {isHistoryLoad && <LoaderSpecific size={10}/>}
+      <div className="hidden md:inline">
+      {isChatHistoryLoad &&  <LoaderSpecific size={10}/>}
+      </div>
+      <div className="md:hidden inline">
+      {(isChatHistoryLoad && !isDash) && <LoaderSpecific size={10}/>}
+      </div>
     </div>
   );
 };

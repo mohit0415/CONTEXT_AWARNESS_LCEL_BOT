@@ -13,6 +13,7 @@ import LoaderSpecific from './LoaderSpecfic';
 
 const NavBar = ({handleCurrentSession}) => {
   const dispatch = useDispatch()
+  const isChatHistoryLoad = useSelector((state)=>state.isBoolean.isChatHistoryLoad)
   const sessionTrigger = useSelector(state=>state.isBoolean.isSessionTrigger)
   const screenSplit = useSelector(state=>state.isBoolean.isSplitSscreen)
   const [sessionLoad,setSessionLoad] = useState(false)
@@ -159,10 +160,10 @@ const NavBar = ({handleCurrentSession}) => {
                  <p className='text-white font-bold text-xsm md:text-md md:inline hidden'>{StringData.app_name}</p>
               </div>
               <div className='flex flex-row  items-center'>
-                <Dropdown  loading={dropDownLoad} value={selectedSession} onChange={handleChange} options={sessions} optionLabel="session_id" placeholder='Select a Session ID'
+                <Dropdown  disabled={isChatHistoryLoad} loading={dropDownLoad || isChatHistoryLoad} value={selectedSession} onChange={handleChange} options={sessions} optionLabel="session_id" placeholder='Select a Session ID'
                 className='bg-[#0F172A] text-white w-[200px] md:w-[300px] lg:w-[400px] max-w-full' />
               </div>
-              <button className='hover:opacity-60 cursor-pointer md:inline hidden' onClick={gen_id}>
+              <button disabled={isChatHistoryLoad} className='hover:opacity-60 disabled:opacity-40 disabled:border-red-500/70 p-1 disabled:border disabled:rounded-lg disbaled:cursor-not-allowed  disabled:cursor-not-allowed cursor-pointer md:inline hidden' onClick={gen_id}>
                 <div className='relative flex justify-center gap-2 items-center py-2 px-6 bg-[#4F46E5] rounded-lg'>
                   <img src={plusIcon} className='w-3 h-3'/>
                   {!sessionLoad?<p className='text-white text-md lg:text-lg font-semibold'>{StringData.new}</p>:<LoaderSpecific size={7}/>}

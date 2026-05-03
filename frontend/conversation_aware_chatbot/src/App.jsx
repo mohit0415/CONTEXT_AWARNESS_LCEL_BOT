@@ -18,6 +18,9 @@ function App() {
   const isModal = useSelector((state)=>state.isModal.isModal)
   const isMsg = useSelector((state)=>state.isModal.isMsg)
   const isDash = useSelector((state)=>state.isBoolean.isDashBoardToggle)
+  const isDebug = useSelector(state=>state.isBoolean.isPopupModal)
+
+  // const [trail,setTrail] =useState(true)
 
   useEffect(()=>{
     console.log("DASHBOARD:",isDash)
@@ -33,6 +36,20 @@ useEffect(()=>{
   console.log('Is LOadinghhhhhhhh',isLoading)
 },[isLoading])
 
+
+useEffect(() => {
+  const handleResize = () => {
+    if (window.innerWidth >= 768) {
+      dispatch({ type: "CLOSEDASH" });
+    }
+  };
+
+  handleResize(); // 👈 run once on load
+  window.addEventListener("resize", handleResize);
+
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
+
   // useEffect(()=>{
   //   dispatch({type:'LOADOUT'})
   // })
@@ -44,7 +61,6 @@ useEffect(()=>{
         <Route path='/' element={<DashBoard/>}/>
       </Routes>
     </Router>
-    {isLoading && <Loader/>}
     <Modal
     isOpen={isModal}
     message={isMsg}

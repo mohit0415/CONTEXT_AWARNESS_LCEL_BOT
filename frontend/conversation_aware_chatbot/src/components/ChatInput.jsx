@@ -7,6 +7,7 @@ import { chat } from "../utils/URLConstants";
 import { useDispatch, useSelector } from "react-redux";
 const ChatInput = ({ onSend,currentSessionId }) => {
 const isHitNum = import.meta.env.VITE_RATE_HIT_COUNTER_HOUR
+const isChatHistoryLoad = useSelector((state)=>state.isBoolean.isChatHistoryLoad)
 const KEY = "rate_err";
 const INITIAL_VALUE = "fresh_start_rate_limit";
   const [message, setMessage] = useState("");
@@ -176,7 +177,8 @@ useEffect(() => {
         value={message}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        placeholder="Ask something..."
+        placeholder={`${isChatHistoryLoad?'Wait ! Chat History loads⏳':'Ask something...'}`}
+        disabled={isChatHistoryLoad}
         rows={1}
         className="w-full resize-none rounded-xl bg-[#0F172A] text-white p-6 pr-20 outline-none"
       />
@@ -188,7 +190,7 @@ useEffect(() => {
         </div>
         <button
         onClick={sendMessage}
-        disabled={storedValue === "error_msg"}
+        disabled={storedValue === "error_msg" || isChatHistoryLoad}
         className={`disabled:cursor-not-allowed cursor-pointer  disabled:bg-red-300 bg-indigo-500 text-white px-3 py-2 rounded-lg hover:opacity-80`}
       >
         <div className="flex gap-2 items-center">

@@ -10,6 +10,7 @@ const Modal = ({isOpen,message}) => {
     const dispatch = useDispatch()
     const handleClose = () => {
         dispatch({type:'ONCLOSE'})
+        dispatch({type:'ISDEBUG'})
     }
   return (
     <div className={`${isOpen?'':'hidden'}`}>

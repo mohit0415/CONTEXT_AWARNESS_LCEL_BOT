@@ -1,12 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import Responsing from "./Responsing";
 import ChatInput from "./ChatInput";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import LoaderSpecific from "./LoaderSpecfic";
 
 const ChatBot = ({currentSessionId,checkBool}) => {
   const dispatch = useDispatch()
   const bottomRef = useRef(null);
   const [check,setCheck] = useState(false)
+  const isLoading = useSelector((state)=>state.isLoad.isLoading)
+  const isDash = useSelector((state)=>state.isBoolean.isDashBoardToggle)
   const [sessionMessages, setSessionMessages] = useState({});
   const[messages,setMessages]=useState([
   // { role: 'user', content: "Hi" },
@@ -61,7 +64,7 @@ useEffect(() => {
 
   }
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full relative">
       <div className="bg-[#0B1326] h-full border-r border-[#334155] w-full flex flex-col">
         <div className="overflow-y-auto flex-1 p-4 pb-1 pt-5">
           {messagesSession.map((item, index) => (
@@ -77,6 +80,12 @@ useEffect(() => {
         <div className="sticky bottom-0 w-full bg-[#131B2E] py-4">
           <ChatInput onSend={onSend} currentSessionId={currentSessionId}/>
         </div>
+      </div>
+      <div className="hidden md:inline">
+      {isLoading &&  <LoaderSpecific size={10}/>}
+      </div>
+      <div className="md:hidden inline">
+      {(isLoading && !isDash) && <LoaderSpecific size={10}/>}
       </div>
     </div>
   );
